@@ -63,10 +63,33 @@ app.post("/articles/:id", function (req, res) {
         });
 });
 
+app.get("/scrape", function (req, res) {
+    axios.get("https://www.wsj.com/").then(function (response) {
 
+        var $ = cheerio.load(response.data);
 
+        $("article.WSJTheme--story--pKzwqDTt").each(function (i, element) {
 
+            var result = {};
 
+            result.title = $(element).find("a").text();
+            result.link = $(element).find("a").attr("href");
+            result.summary = $(element).find("p").text();
+
+            db.Article.create(result)
+            .then(function (dbArticle) {
+              console.log(dbArticle);
+            })
+            .catch(function (err) {
+              console.log(err);
+            });
+        });
+    })
+});
+// Listen on port 3000
+app.listen(3000, function () {
+    console.log("App running on port 3000!");
+});
 
 app.listen(PORT, function () {
     console.log("App running on port " + PORT + "!");
