@@ -1,0 +1,11 @@
+<div>
+    Hello User
+</div>
+{{#each article}}
+<div dataid={{{_id}}}>
+    <h1>{{{title}}}</h1>
+    <h2>{{{summary}}}</h2>
+    <a href="{{{link}}}" target="_blank">Link</a>
+    <a href="/articles/{{{_id}}}">Comment</a>
+</div>
+{{/each}}

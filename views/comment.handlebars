@@ -1,0 +1,15 @@
+<button><a href="/">Home</a></button>
+
+<h2>{{{title}}}</h2>
+
+<div>
+    {{#each note}}
+    <h4>{{{this.username}}} says:</h4>
+    <p>{{{this.body}}}</p>
+    {{/each}}
+</div>
+<form action="/articles/{{{_id}}}" method="POST">
+    <input type="text" name="username" placeholder="Your Name" required>
+    <textarea type="text" name="body" placeholder="Your Note" required></textarea>
+    <input type="submit">
+</form>
