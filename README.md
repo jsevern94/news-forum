@@ -1,1 +1,2 @@
 # news-forum
+Using Express, Handlebars, MongoDB/Mongoose, Cheerio, and Axios, I've built a news forum that scrapes articles from the Wall Street Journal and allows users to comment on said articles. I have not implemented authentication at this point, but it will be coming in a future version! For now, check it out at https://calm-beach-78845.herokuapp.com/ and be sure to comment on your favorite articles!
