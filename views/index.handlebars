@@ -1,11 +1,42 @@
-<div>
-    Hello User
+<div class="hidden md:flex justify-left" style="font-family: 'EB Garamond', serif;">
+    <button
+        class="text-2xl tracking-wider bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 mt-4 mb-4 ml-4 rounded-lg">
+        <a href="/scrape">Scrape new articles</a>
+    </button>
 </div>
-{{#each article}}
-<div dataid={{{_id}}}>
-    <h1>{{{title}}}</h1>
-    <h2>{{{summary}}}</h2>
-    <a href="{{{link}}}" target="_blank">Link</a>
-    <a href="/articles/{{{_id}}}">Comment</a>
+
+<div class="flex flex-col mb-16" style="font-family: 'Cinzel', serif;">
+    <div class="text-6xl text-center tracking-wide">
+        Mongo Scraper
+    </div>
+
+    <div class="text-4xl text-center">
+        Wall Street Journal
+    </div>
 </div>
-{{/each}}
+
+<div class="flex md:hidden justify-center" style="font-family: 'EB Garamond', serif;">
+    <button
+        class="text-2xl tracking-wider bg-blue-700 hover:bg-blue-800 text-white py-2 px-4 mt-4 mb-4 rounded-lg">
+        <a href="/scrape">Scrape new articles</a>
+    </button>
+</div>
+
+<div class="flex flex-wrap justify-around">
+    {{#each article}}
+    <div dataid={{{_id}}} class="relative w-4/5 md:w-1/3 lg:w-1/4 rounded-lg bg-white shadow-lg mx-6 my-5 pb-8" style="font-family: 'EB Garamond', serif;">
+        <h1 class="text-3xl mb-3 p-2 rounded-t-lg font-bold bg-blue-700 tracking-wide text-white">{{{title}}}</h1>
+        <h2 class="text-xl p-2">{{{summary}}}</h2>
+        <div class="flex absolute bottom-0 mb-2 text-xl">
+            <a href="{{{link}}}" target="_blank" class="text-blue-500 hover:text-blue-300 mx-2">View Article</a>
+            <a href="/articles/{{{_id}}}" class="text-blue-500 hover:text-blue-300 mx-2">Comment</a>
+        </div>
+    </div>
+    {{/each}}
+    {{#unless article}}
+    <p class="py-4 px-3 text-3xl rounded-lg font-bold text-white" style="background-color:rgba(49,130,206,0.75);"><span>No articles found... Scrape
+        to view and comment on articles!</span></p>
+    {{/unless}}
+</div>
+
+<div class="bg-cover bg-center bg-fixed bg-blue-200 px-3 py-2 ml-10 mt-4 rounded-lg border-black shadow-lg z-10 w-2/12 md:w-2/5 lg:w-3/5 flex-shrink-0 hidden"></div>

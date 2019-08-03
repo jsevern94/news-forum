@@ -73,7 +73,7 @@ app.get("/scrape", function (req, res) {
         var $ = cheerio.load(response.data);
 
         $("article.WSJTheme--story--pKzwqDTt").each(function (i, element) {
-            if ($(element).find("p").text()) {
+            if ($(element).find(".WSJTheme--summary--12br5Svc").text()) {
                 var result = {};
 
                 result.title = $(element).find(".WSJTheme--headline--19_2KfxG").text();
