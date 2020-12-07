@@ -25,20 +25,19 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 app.get("/", (req, res) => {
     db.Article.find({})
-        .then(function (dbArticle) {
+        .then((dbArticle) => {
             res.render('index', { article: dbArticle });
         })
-        .catch(function (err) {
+        .catch((err) => {
             res.json(err);
         });
 });
 
-app.get("/articles/:id", function (req, res) {
+app.get("/articles/:id", (req, res) => {
     db.Article.find({ _id: req.params.id })
         .populate("notes")
-        .then(function (dbArticle) {
+        .then((dbArticle) => {
             dbArticle = dbArticle[0]
-            console.log(dbArticle);
             const noteObject = {
                 title: dbArticle.title,
                 summary: dbArticle.summary,
@@ -48,29 +47,29 @@ app.get("/articles/:id", function (req, res) {
             }
             res.render("comment", noteObject);
         })
-        .catch(function (err) {
+        .catch((err) => {
             res.json(err);
         })
 });
 
-app.post("/articles/:id", function (req, res) {
+app.post("/articles/:id", (req, res) => {
     db.Note.create(req.body)
-        .then(function (dbNote) {
+        .then((dbNote) => {
             return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
         })
-        .then(function (dbArticle) {
+        .then((dbArticle) => {
             res.redirect("back");
         })
-        .catch(function (err) {
+        .catch((err) => {
             res.json(err);
         });
 });
 
-app.get("/scrape", function (req, res) {
-    axios.get("https://www.wsj.com/").then(function (response) {
+app.get("/scrape", (req, res) => {
+    axios.get("https://www.wsj.com/").then((response) => {
 
         const $ = cheerio.load(response.data);
-        $("article.WSJTheme--story--XB4V2mLz").each(function (i, element) {
+        $("article.WSJTheme--story--XB4V2mLz").each((i, element) => {
             if ($(element).find(".WSJTheme--summary--lmOXEsbN ").text()) {
                 const result = {};
                 result.title = $(element).find(".WSJTheme--headline--unZqjb45").text();
@@ -78,20 +77,20 @@ app.get("/scrape", function (req, res) {
                 result.summary = $(element).find(".WSJTheme--summary--lmOXEsbN ").clone().children().remove().end().text();
 
                 db.Article.create(result)
-                    .then(function (dbArticle) {
+                    .then((dbArticle) => {
                         console.log(dbArticle);
                     })
-                    .catch(function (err) {
+                    .catch((err) => {
                         console.log(err);
                     });
             }
         });
-    }).then(function () {
+    }).then(() => {
         res.redirect("back");
     })
 });
 
-app.listen(PORT, function () {
+app.listen(PORT, () => {
     console.log("App running on port " + PORT + "!");
 });
 
