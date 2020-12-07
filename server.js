@@ -1,26 +1,26 @@
-var express = require("express");
-var mongoose = require("mongoose");
+const express = require("express");
+const mongoose = require("mongoose");
 
-var axios = require("axios");
-var cheerio = require("cheerio");
+const axios = require("axios");
+const cheerio = require("cheerio");
 
-var db = require("./models");
+const db = require("./models");
 
-var PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
-var app = express();
+const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-var exphbs = require('express-handlebars');
+const exphbs = require('express-handlebars');
 
 app.engine("handlebars", exphbs({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");
 
 
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 app.get("/", (req, res) => {
@@ -38,8 +38,8 @@ app.get("/articles/:id", function (req, res) {
         .populate("notes")
         .then(function (dbArticle) {
             dbArticle = dbArticle[0]
-            console.log(dbArticle.notes);
-            var noteObject = {
+            console.log(dbArticle);
+            const noteObject = {
                 title: dbArticle.title,
                 summary: dbArticle.summary,
                 link: dbArticle.link,
@@ -54,7 +54,6 @@ app.get("/articles/:id", function (req, res) {
 });
 
 app.post("/articles/:id", function (req, res) {
-    console.log(req.body)
     db.Note.create(req.body)
         .then(function (dbNote) {
             return db.Article.findOneAndUpdate({ _id: req.params.id }, { $push: { notes: dbNote._id } }, { new: true });
@@ -70,15 +69,13 @@ app.post("/articles/:id", function (req, res) {
 app.get("/scrape", function (req, res) {
     axios.get("https://www.wsj.com/").then(function (response) {
 
-        var $ = cheerio.load(response.data);
-
-        $("article.WSJTheme--story--pKzwqDTt").each(function (i, element) {
-            if ($(element).find(".WSJTheme--summary--12br5Svc").text()) {
-                var result = {};
-
-                result.title = $(element).find(".WSJTheme--headline--19_2KfxG").text();
+        const $ = cheerio.load(response.data);
+        $("article.WSJTheme--story--XB4V2mLz").each(function (i, element) {
+            if ($(element).find(".WSJTheme--summary--lmOXEsbN ").text()) {
+                const result = {};
+                result.title = $(element).find(".WSJTheme--headline--unZqjb45").text();
                 result.link = $(element).find("a").attr("href");
-                result.summary = $(element).find(".WSJTheme--summary--12br5Svc").clone().children().remove().end().text();
+                result.summary = $(element).find(".WSJTheme--summary--lmOXEsbN ").clone().children().remove().end().text();
 
                 db.Article.create(result)
                     .then(function (dbArticle) {
